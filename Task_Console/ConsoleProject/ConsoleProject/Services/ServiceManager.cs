@@ -6,23 +6,32 @@ namespace ConsoleProject.Services
 {
     class ServiceManager<TItem> 
     {
-        Stack<TItem> Items = new Stack<TItem>();
+       public Queue<TItem> Items = new Queue<TItem>();
         public bool done;
 
         public void addInQueue(TItem Item)
         {
             if (done)
             {
-                Items.Push(Item);
+                Items.Enqueue(Item);
             }
+        }
+
+        public  Queue<TItem> VipPop(TItem item)
+        {
+            if (done)
+            {
+            Items.Enqueue(item);
+            }
+            return Items;
         }
 
         public async void addInQueueAsync(TItem item1, TItem item2)
         {
             if (done)
             {
-                Items.Push(item1);
-                Items.Push(item2);
+                Items.Enqueue(item1);
+                Items.Enqueue(item2);
             }
         }
 
@@ -30,7 +39,7 @@ namespace ConsoleProject.Services
         {
             if (done)
             {
-                TItem item = Items.Pop();
+                TItem item = Items.Dequeue();
 
                 return item.ToString();
             }

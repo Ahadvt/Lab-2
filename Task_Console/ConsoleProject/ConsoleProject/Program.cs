@@ -2,6 +2,8 @@
 using ConsoleProject.Models;
 using ConsoleProject.Services;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace ConsoleProject
 {
@@ -17,6 +19,7 @@ namespace ConsoleProject
                 Console.WriteLine("2.Add queueAsync");
                 Console.WriteLine("3.removeFromQueue");
                 Console.WriteLine("4.IsQueEmpty");
+                Console.WriteLine("5.Vip_Pop");
                 Console.WriteLine("0. Out");
 
                 string choose = Console.ReadLine();
@@ -46,6 +49,10 @@ namespace ConsoleProject
                     case 4:
                         Console.Clear();
                         IsqueEmpty(ref serviceManager);
+                        break;  
+                    case 5:
+                        Console.Clear();
+                        VipPop(ref serviceManager);
                         break;
 
                     case 0:
@@ -106,6 +113,33 @@ namespace ConsoleProject
             Console.WriteLine(result);
             serviceManager.done = serviceManager.done.Lock();
 
+        }
+
+        static void VipPop(ref ServiceManager<Product> serviceManager)
+        {
+            Console.WriteLine("Please add product name");
+            string name = Console.ReadLine();
+            Console.WriteLine("Please add product Price");
+            double.TryParse(Console.ReadLine(), out double price);
+
+            Product product = new Product(name ,price);
+
+            serviceManager.done = serviceManager.done.Unlock();
+            Queue<Product> Products = serviceManager.VipPop(product);
+            Stack<Product> stack = new Stack<Product>();
+            foreach (var item in Products)
+            {
+               
+                stack.Push(item);
+            }
+
+                serviceManager.Items.Clear();
+            foreach (var item in stack)
+            {
+                serviceManager.Items.Enqueue(item);
+            }
+            serviceManager.done = serviceManager.done.Lock();
+            Console.WriteLine("vip product created");
         }
     }
 
